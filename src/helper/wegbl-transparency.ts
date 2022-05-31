@@ -46,7 +46,7 @@ const shader = `
   `;
 
 
-export function addShader(
+export function drawShader(
   source: HTMLCanvasElement, 
   target: HTMLCanvasElement,
   keyColor: string, 
@@ -97,23 +97,19 @@ export function addShader(
   const smoothnessLoc = gl.getUniformLocation(prog, "smoothness");
   const spillLoc = gl.getUniformLocation(prog, "spill");
 
-  // function processFrame() {
-    if(!(window as any).enableWebgl) return;
-    target.width = source.width;
-    target.height = source.height;
-    gl.viewport(0, 0, source.width, source.height);
-    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB, gl.UNSIGNED_BYTE, source);
-    gl.uniform1i(texLoc, 0);
-    gl.uniform1f(texWidthLoc, target.width);
-    gl.uniform1f(texHeightLoc, target.height);
+  if(!(window as any).enableWebgl) return;
+  target.width = source.width;
+  target.height = source.height;
+  gl.viewport(0, 0, source.width, source.height);
+  gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB, gl.UNSIGNED_BYTE, source);
+  gl.uniform1i(texLoc, 0);
+  gl.uniform1f(texWidthLoc, target.width);
+  gl.uniform1f(texHeightLoc, target.height);
 
-    const m = (keyColor as any).match(/^#([0-9a-f]{6})$/i)[1];
-    gl.uniform3f(keyColorLoc, parseInt(m.substr(0, 2), 16) / 255, parseInt(m.substr(2, 2), 16) / 255, parseInt(m.substr(4, 2), 16) / 255);
-    gl.uniform1f(similarityLoc, similarity);
-    gl.uniform1f(smoothnessLoc, smoothness);
-    gl.uniform1f(spillLoc, spill);
-    gl.drawArrays(gl.TRIANGLE_FAN, 0, 4);
-    // requestAnimationFrame(processFrame);
-  // }
-  // requestAnimationFrame(processFrame)
+  const m = (keyColor as any).match(/^#([0-9a-f]{6})$/i)[1];
+  gl.uniform3f(keyColorLoc, parseInt(m.substr(0, 2), 16) / 255, parseInt(m.substr(2, 2), 16) / 255, parseInt(m.substr(4, 2), 16) / 255);
+  gl.uniform1f(similarityLoc, similarity);
+  gl.uniform1f(smoothnessLoc, smoothness);
+  gl.uniform1f(spillLoc, spill);
+  gl.drawArrays(gl.TRIANGLE_FAN, 0, 4);
 }

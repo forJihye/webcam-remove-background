@@ -24,7 +24,6 @@ export function transparent(ctx: CanvasRenderingContext2D, results: Results) {
   ctx.save();
   ctx.translate(ctx.canvas.width, 0);
   ctx.scale(-1, 1);
-  ctx.drawImage(ctx.canvas, 0, 0);
   
   ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
   // Draw the mask
@@ -46,6 +45,6 @@ selfieSegmentation.setOptions({
 export async function drawSegmentation (segmentation: SelfieSegmentation , ctx: CanvasRenderingContext2D, videoElement: HTMLVideoElement) {
   // segmentation.onResults(results => greenScreen(ctx, results));
   // await segmentation.send({image: videoElement});
-  selfieSegmentation.onResults(results => greenScreen(ctx, results));
+  selfieSegmentation.onResults(results => transparent(ctx, results));
   await selfieSegmentation.send({image: videoElement});
 }
